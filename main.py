@@ -425,7 +425,7 @@ print("loading page")
 #main_page
 #main_page = requests.get(url)
 
-driver = webdriver.Firefox()
+driver = webdriver.Chrome()
 
 
 driver.get(url)
@@ -446,6 +446,9 @@ myWait(driver)
 bruteForceAcceptCookies(driver)
 
 while(True):
+
+    myWait(driver)
+
     myLawyers = IterateThroughDieAnwaltin(driver)
 
     #append to csv in current dur
@@ -455,13 +458,12 @@ while(True):
 
     #click next? wait, do it again
     try:
-        button = driver.find_element(By.XPATH,"//button[contains(@class, 'button1') and contains(@class, 'arrowRight') and contains(text(), 'Next')]")
+        button = driver.find_element(By.XPATH,"//a[contains(@class, 'button1') and contains(@class, 'arrowRight') and contains(@class, 'grey') and contains(@class, 'rounded') and text()[normalize-space()='Next']]")
         button.click()
 
     except Exception as e:
         print(f"An error occurred: {e}")
         pass
-
 
 
 
