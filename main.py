@@ -1,7 +1,333 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 from itertools import count
 import selenium
 import requests
 from bs4 import BeautifulSoup
+from dataclasses import dataclass, field
+from typing import List
+
+@dataclass
+class Lawyer:
+    first_name: str
+    last_name: str
+    emails: List[str] = field(default_factory=list)
+    address: str = ""
+    telephone: str = ""
+    fax: str = ""
+    web: str = ""
+    professional_title: str = ""
+    law_firm: str = ""
+    law_firm_reg_num: str = ""
+    lawyer_reg_num: str = ""
+    areas_of_work: List[str] = field(default_factory=list)
+    language: str = ""
+    digitalSignature: str = ""
+
+    def __str__(self):
+        return (f"Lawyer({self.first_name} {self.last_name}, "
+                f"Email: {', '.join(self.emails)}, "
+                f"Address: {self.address}, "
+                f"Telephone: {self.telephone}, "
+                f"Fax: {self.fax}, "
+                f"Web: {self.web}, "
+                f"Professional Title: {self.professional_title}, "
+                f"Law Firm: {self.law_firm}, "
+                f"Law Firm Registration Number: {self.law_firm_reg_num}, "
+                f"Lawyer Registration Number: {self.lawyer_reg_num}, "
+                f"Areas of Work: {', '.join(self.areas_of_work)}, "
+                f"Language: {self.language})"
+                f"DigitalSignature: {self.digitalSignature}")
+
+def BuildLawyer(driver):
+
+
+
+
+    myfirst_name = ""
+    mylast_name = ""
+    myemails = []
+    myaddress = ""
+    mytelephone = ""
+    myfax = ""
+    myweb = ""
+    myprofessional_title = ""
+    myregistration_number = ""
+    mylaw_firm = ""
+    mylaw_firm_reg_num = ""
+    mylawyer_reg_num = ""
+    myareas_of_work = []
+    mylanguage = ""
+    mydigitalsignature = ""
+
+    #lastname
+    try:
+        element = driver.find_element(By.CLASS_NAME,"lastname")
+        mylast_name=element.text
+
+    except Exception:
+        pass
+
+    #email
+    try:
+        element = driver.find_element(By.CLASS_NAME, "email")
+        myemails.append(element.text) #remove/string clean Email prefix
+
+    except Exception:
+        pass
+
+    #web
+    try:
+        element = driver.find_element(By.XPATH, "//li[contains(text(), 'Web:')]/a")
+        myweb=element.text
+
+    except Exception:
+        pass
+    #fax
+    try:
+        element = driver.find_element(By.XPATH, "//li[contains(text(), 'Fax:')]")
+        myfax=element.text #remove fax from text
+
+    except Exception:
+        pass
+    #telephone
+    try:
+        element = driver.find_element(By.XPATH, "//li[contains(text(), 'Telephone:')]")
+        mytelephone=element.text #remove telephone
+
+    except Exception:
+        pass
+
+    #professional title
+    try:
+        element = driver.find_element(By.XPATH, "//tr[td[normalize-space(text())='Professional title:']]/td[2]")
+        myprofessional_title = element.text
+
+    except Exception:
+        pass
+
+    # lawyers registration number
+    try:
+        element = driver.find_element(By.XPATH, "//tr[td[normalize-space(text())='Lawyers‘ registration number:']]/td[2]")
+        mylawyer_reg_num = element.text
+
+    except Exception:
+        pass
+
+    # Law Firm
+    try:
+        element = driver.find_element(By.XPATH,"//tr[td[normalize-space(text())='Law firm:']]/td[2]")
+        mylaw_firm = element.text
+
+    except Exception:
+        pass
+    # Law Firm Reg Num
+    try:
+        element = driver.find_element(By.XPATH, "//tr[td[normalize-space(text())='Law firm registration number:']]/td[2]")
+        mylaw_firm = element.text
+
+    except Exception:
+        pass
+    # Areas of Work
+    try:
+        element = driver.find_element(By.XPATH, "//tr[td[normalize-space(text())='Law firm registration number:']]/td[2]")
+        mylaw_firm = element.text
+
+    except Exception:
+        pass
+    # Areas of Work
+    try:
+        element = driver.find_element(By.XPATH,"//tr[td[normalize-space(text())='Areas of work:']]/td[2]")
+        myareas_of_work.append(element.text)
+
+    except Exception:
+        pass
+    # Language
+    try:
+        element = driver.find_element(By.XPATH, "//tr[td[normalize-space(text())='Language:']]/td[2]")
+        mylanguage = element.text
+
+    except Exception:
+        pass
+    # Digital Signature
+
+    try:
+        element = driver.find_element(By.XPATH, "//li[contains(text(), 'Digital Signature:')]/a")
+        mydigitalsignature = element.text
+
+    except Exception:
+        pass
+
+
+
+    new_lawyer = Lawyer(
+        first_name=myfirst_name,
+        last_name=mylast_name,
+        emails=myemails,
+        address=myaddress,
+        telephone=mytelephone,
+        fax=myfax,
+        web=myweb,
+        professional_title=myprofessional_title,
+        law_firm=mylaw_firm,
+        law_firm_reg_num=mylaw_firm_reg_num,
+        lawyer_reg_num=mylawyer_reg_num,
+        areas_of_work=myareas_of_work,
+        language=mylanguage,
+        digitalSignature = mydigitalsignature
+    )
+
+    return new_lawyer
+
+def IterateThroughDieAnwaltin(driver):
+
+    lawyers: List[Lawyer] = []
+    lastNames = driver.find_elements(By.CLASS_NAME,"lastname") #in theory we receive element that can be clicked?
+
+
+#make list containing first, last, and emails per profile, 2d array, of variable length
+    for i in range(0,len(lastNames)-1):
+        lastNames[i].click()
+        myWait(driver)
+        new_lawyer = BuildLawyer(driver)
+
+
+        lawyers.append(new_lawyer)
+        driver.back()
+        myWait(driver)
+        lastNames = driver.find_elements(By.CLASS_NAME, "lastname")
+        myWait(driver)
+    return lawyers
+
+def bruteForceAcceptCookies(driver):
+
+    try:
+        button = driver.find_element(By.XPATH,"//button[contains(@class, 'ccm--save-settings') and contains(@class, 'ccm--button-primary')]")
+        button.click()
+
+    except Exception:
+        pass
+
+    if(not button.is_displayed()):
+        return 0
+
+
+
+    try:
+        button = driver.find_element(By.CSS_SELECTOR, ".button.ccm--save-settings.ccm--button-primary.ccm--ctrl-init")
+        button.click()
+
+    except Exception:
+        pass
+
+
+    if(not button.is_displayed()):
+        return 0
+
+    try:
+        button = driver.find_element(By.CSS_SELECTOR, "button:contains('Alle Cookies akzeptieren')")
+        button.click()
+
+    except Exception:
+        pass
+
+
+    if(not button.is_displayed()):
+        return 0
+
+    try:
+        button = driver.find_element(By.CSS_SELECTOR, "button[data-full-consent='true']")
+        button.click()
+
+    except Exception:
+        pass
+
+
+    if(not button.is_displayed()):
+        return 0
+
+    try:
+        button = driver.find_element(By.XPATH, "//button[@data-full-consent='true']")
+        button.click()
+
+    except Exception:
+        pass
+
+
+    if(not button.is_displayed()):
+        return 0
+
+    try:
+        button = driver.find_element(By.XPATH, "//button[text()='Alle Cookies akzeptieren']")
+        button.click()
+    except Exception:
+        pass
+
+
+    if(not button.is_displayed()):
+        return 0
+
+
+    try:
+        button = driver.find_element(By.XPATH, "//button[@data-full-consent='true' and contains(text(), 'Alle Cookies')]")
+        button.click()
+
+    except Exception:
+        pass
+
+
+    if(not button.is_displayed()):
+        return 0
+
+    try:
+        button = driver.find_element(By.XPATH, "//button[contains(text(), 'Alle Cookies')]")
+        button.click()
+    except Exception:
+        pass
+
+
+    if(not button.is_displayed()):
+        return 0
+
+    try:
+        button = driver.find_element(By.XPATH, "//button[contains(text(), 'Alle Cookies')]")
+        button.click()
+    except Exception:
+        pass
+
+
+    if(not button.is_displayed()):
+        return 0
+
+    try:
+        button = driver.find_element(By.XPATH, "//button[contains(text(), 'Alle Cookies')]")
+        button.click()
+    except Exception:
+        pass
+
+
+    if(not button.is_displayed()):
+        return 0
+
+
+def myWait(driver,impWaitTime=0):
+
+    driver.implicitly_wait(impWaitTime)
+    driver.implicitly_wait(3)
+
+    WebDriverWait(driver, 10).until(
+        lambda d: driver.execute_script("return document.readyState") == "complete"
+    )
+
+
+
+
+
+
+
+
 
 # List of supposed codes, will double check later for hallucinations.
 # Informational responses (100–199)
@@ -72,8 +398,48 @@ headers=headers
 url = 'https://www.oerak.at/en/support-and-services/services/find-a-lawyer/?tx_rafinden_simplesearch%5Blimit%5D=25&tx_rafinden_simplesearch%5Baction%5D=fullList&tx_rafinden_simplesearch%5Bcontroller%5D=LawyerSearch&cHash=a23a49c3c51b91abedd4e66a07a2bf1a'
 baseSiteUrl = 'https://www.oerak.at'
 print("loading page")
+
 #main_page
-main_page = requests.get(url)
+#main_page = requests.get(url)
+
+driver = webdriver.Firefox()
+
+
+driver.get(url)
+
+
+
+
+
+# "button ccm--save-settings ccm--button-primary ccm--ctrl-init"
+#wait = WebDriverWait(driver, 10)
+
+#WebDriverWait(driver, 10).until(
+#    lambda d: driver.execute_script("return document.readyState") == "complete"
+#)
+
+myWait(driver)
+
+bruteForceAcceptCookies(driver)
+
+myLawyers = IterateThroughDieAnwaltin(driver)
+#wait = WebDriverWait(driver, 10)
+
+for index,lawyer in enumerate(myLawyers):
+    print(index,lawyer)
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 print(main_page.status_code)
 soup = BeautifulSoup(main_page.text, 'html.parser')
 #print(soup)
@@ -129,7 +495,7 @@ if (len(lastName_elements) == len(email_elements)):
 else:
     for emai in email_elements:
         print(f"Email {next(indexer)}: {item}")
-"""
+
 such is what the links to lawyers on the page look like. 
 <a href="/en/support-and-services/services/find-a-lawyer/?tx_rafinden_simplesearch%5Blid%5D=1853&amp;tx_rafinden_simplesearch%5Baction%5D=show&amp;tx_rafinden_simplesearch%5Bcontroller%5D=LawyerSearch&amp;cHash=c03db335e19db3d6dfec345926213cd6">
 <span class="lastname">ABEL</span>
@@ -138,7 +504,7 @@ such is what the links to lawyers on the page look like.
 <span class="title">Mag.</span>
 </a>
 
-"""
+
 
 
 def print_hi(name):
@@ -151,3 +517,4 @@ if __name__ == '__main__':
     print_hi('PyCharm')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
+"""
