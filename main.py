@@ -6,7 +6,7 @@ from itertools import count
 import selenium
 import requests
 from bs4 import BeautifulSoup
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field,asdict
 from typing import List
 
 @dataclass
@@ -67,7 +67,8 @@ def BuildLawyer(driver):
         element = driver.find_element(By.CLASS_NAME,"lastname")
         mylast_name=element.text
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
     #email
@@ -75,7 +76,8 @@ def BuildLawyer(driver):
         element = driver.find_element(By.CLASS_NAME, "email")
         myemails.append(element.text) #remove/string clean Email prefix
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
     #web
@@ -83,21 +85,24 @@ def BuildLawyer(driver):
         element = driver.find_element(By.XPATH, "//li[contains(text(), 'Web:')]/a")
         myweb=element.text
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
     #fax
     try:
         element = driver.find_element(By.XPATH, "//li[contains(text(), 'Fax:')]")
         myfax=element.text #remove fax from text
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
     #telephone
     try:
         element = driver.find_element(By.XPATH, "//li[contains(text(), 'Telephone:')]")
         mytelephone=element.text #remove telephone
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
     #professional title
@@ -105,7 +110,8 @@ def BuildLawyer(driver):
         element = driver.find_element(By.XPATH, "//tr[td[normalize-space(text())='Professional title:']]/td[2]")
         myprofessional_title = element.text
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
     # lawyers registration number
@@ -113,7 +119,8 @@ def BuildLawyer(driver):
         element = driver.find_element(By.XPATH, "//tr[td[normalize-space(text())='Lawyers‘ registration number:']]/td[2]")
         mylawyer_reg_num = element.text
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
     # Law Firm
@@ -121,35 +128,40 @@ def BuildLawyer(driver):
         element = driver.find_element(By.XPATH,"//tr[td[normalize-space(text())='Law firm:']]/td[2]")
         mylaw_firm = element.text
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
     # Law Firm Reg Num
     try:
         element = driver.find_element(By.XPATH, "//tr[td[normalize-space(text())='Law firm registration number:']]/td[2]")
         mylaw_firm = element.text
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
     # Areas of Work
     try:
         element = driver.find_element(By.XPATH, "//tr[td[normalize-space(text())='Law firm registration number:']]/td[2]")
         mylaw_firm = element.text
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
     # Areas of Work
     try:
         element = driver.find_element(By.XPATH,"//tr[td[normalize-space(text())='Areas of work:']]/td[2]")
         myareas_of_work.append(element.text)
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
     # Language
     try:
         element = driver.find_element(By.XPATH, "//tr[td[normalize-space(text())='Language:']]/td[2]")
         mylanguage = element.text
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
     # Digital Signature
 
@@ -157,7 +169,8 @@ def BuildLawyer(driver):
         element = driver.find_element(By.XPATH, "//li[contains(text(), 'Digital Signature:')]/a")
         mydigitalsignature = element.text
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
 
@@ -207,7 +220,8 @@ def bruteForceAcceptCookies(driver):
         button = driver.find_element(By.XPATH,"//button[contains(@class, 'ccm--save-settings') and contains(@class, 'ccm--button-primary')]")
         button.click()
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
     if(not button.is_displayed()):
@@ -219,7 +233,8 @@ def bruteForceAcceptCookies(driver):
         button = driver.find_element(By.CSS_SELECTOR, ".button.ccm--save-settings.ccm--button-primary.ccm--ctrl-init")
         button.click()
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
 
@@ -230,7 +245,8 @@ def bruteForceAcceptCookies(driver):
         button = driver.find_element(By.CSS_SELECTOR, "button:contains('Alle Cookies akzeptieren')")
         button.click()
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
 
@@ -241,7 +257,8 @@ def bruteForceAcceptCookies(driver):
         button = driver.find_element(By.CSS_SELECTOR, "button[data-full-consent='true']")
         button.click()
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
 
@@ -252,7 +269,8 @@ def bruteForceAcceptCookies(driver):
         button = driver.find_element(By.XPATH, "//button[@data-full-consent='true']")
         button.click()
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
 
@@ -262,7 +280,8 @@ def bruteForceAcceptCookies(driver):
     try:
         button = driver.find_element(By.XPATH, "//button[text()='Alle Cookies akzeptieren']")
         button.click()
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
 
@@ -274,7 +293,8 @@ def bruteForceAcceptCookies(driver):
         button = driver.find_element(By.XPATH, "//button[@data-full-consent='true' and contains(text(), 'Alle Cookies')]")
         button.click()
 
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
 
@@ -284,7 +304,8 @@ def bruteForceAcceptCookies(driver):
     try:
         button = driver.find_element(By.XPATH, "//button[contains(text(), 'Alle Cookies')]")
         button.click()
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
 
@@ -294,7 +315,8 @@ def bruteForceAcceptCookies(driver):
     try:
         button = driver.find_element(By.XPATH, "//button[contains(text(), 'Alle Cookies')]")
         button.click()
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
 
@@ -304,7 +326,8 @@ def bruteForceAcceptCookies(driver):
     try:
         button = driver.find_element(By.XPATH, "//button[contains(text(), 'Alle Cookies')]")
         button.click()
-    except Exception:
+    except Exception as e:
+        print(f"An error occurred: {e}")
         pass
 
 
@@ -315,7 +338,7 @@ def bruteForceAcceptCookies(driver):
 def myWait(driver,impWaitTime=0):
 
     driver.implicitly_wait(impWaitTime)
-    driver.implicitly_wait(3)
+    driver.implicitly_wait(5)
 
     WebDriverWait(driver, 10).until(
         lambda d: driver.execute_script("return document.readyState") == "complete"
@@ -422,60 +445,22 @@ myWait(driver)
 
 bruteForceAcceptCookies(driver)
 
-myLawyers = IterateThroughDieAnwaltin(driver)
-#wait = WebDriverWait(driver, 10)
+while(True):
+    myLawyers = IterateThroughDieAnwaltin(driver)
 
-for index,lawyer in enumerate(myLawyers):
-    print(index,lawyer)
+    #append to csv in current dur
+    with open("output.txt", "w") as file:
+        for item in myLawyers:
+            file.write(str(asdict(item)) + "\n")
 
+    #click next? wait, do it again
+    try:
+        button = driver.find_element(By.XPATH,"//button[contains(@class, 'button1') and contains(@class, 'arrowRight') and contains(text(), 'Next')]")
+        button.click()
 
-
-
-
-
-
-
-
-
-
-
-"""
-print(main_page.status_code)
-soup = BeautifulSoup(main_page.text, 'html.parser')
-#print(soup)
-#firstName_elements = soup.find_all(class_='firstname')
-lastName_elements = soup.find_all(class_='lastname')
-email_elements = []
-urls = [span.find_parent('a')['href'] for span in lastName_elements]
-urls = urls[:5] #remove, for testing only
-#lastname_links = soup.find_all('a', class_=['lastname'])
-
-
-#print(urls)
-#so we get all lawyer names, indexed by last name alphabetically. 50 results at a time.
-indexer = count(start=1,step=1)
-for item in urls:
-    print(f"Item {next(indexer)}: {item}")
-    #go in
-    mini_page = requests.get('https://www.oerak.at'+item)
-    print('Url for minipage is: ' + mini_page.url)
-
-    mini_soup = BeautifulSoup(mini_page.text, 'html.parser')
-    #in case of multiple emails
-    #emails = mini_soup.find_all(class_='email')
-
-    email_list_items = mini_soup.find_all(class_='email')
-
-    # Extract URLs from the <a> tags inside these <li> elements
-    #emails = [li.find('a')['href'] for li in email_list_items if li.find('a')]
-
-
-
-
-    for item in email_list_items:
-        email_elements.append(item.text)
-#gottem so we go back to main
-    main_page = requests.get(url)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        pass
 
 
 
@@ -487,34 +472,3 @@ for item in urls:
 
 
 
-indexer = count(start=1,step=1)
-if (len(lastName_elements) == len(email_elements)):
-    for email,lastName in zip(email_elements,lastName_elements):
-        index = next(indexer)
-        print(f"Index: {index}, Primary Item: {lastName}, Email: {email}")
-else:
-    for emai in email_elements:
-        print(f"Email {next(indexer)}: {item}")
-
-such is what the links to lawyers on the page look like. 
-<a href="/en/support-and-services/services/find-a-lawyer/?tx_rafinden_simplesearch%5Blid%5D=1853&amp;tx_rafinden_simplesearch%5Baction%5D=show&amp;tx_rafinden_simplesearch%5Bcontroller%5D=LawyerSearch&amp;cHash=c03db335e19db3d6dfec345926213cd6">
-<span class="lastname">ABEL</span>
-<br>
-<span class="firstname">Norbert</span>
-<span class="title">Mag.</span>
-</a>
-
-
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
-"""
